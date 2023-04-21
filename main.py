@@ -1,6 +1,9 @@
 from pygame import *
 from random import *
 
+speed_x = 7
+speed_y = 7
+
 razreshenie = 1000, 628
 clock = time.Clock()
 FPS = 60
@@ -46,11 +49,15 @@ class Player(GameSprite):
 font.init()
 font1 = font.SysFont('Arial', 40)
 font2 = font.SysFont('Arial', 20)
-win = font1.render('player 2 win', True, (0, 255, 0))
-lose = font1.render('player 1 win', True, (255, 0, 0))
+win1 = font1.render('player 1 win', True, (255, 0, 0))
+win2 = font1.render('player 2 win', True, (0, 255, 0))
 
 player1 = Player("rocket.png", 10, 100, 200, 40, 150)
 player2 = Player("rocket.png", 10, 900, 200, 40, 150)
+
+ball = GameSprite('hhh.png', 7, 300, 300, 50,50)
+
+
 
 finish = False
 
@@ -61,6 +68,32 @@ while game:
         player1.update_l()
         player2.reset()
         player2.update_r()
+        ball.reset()
+
+        ball.rect.x += speed_x
+        ball.rect.y += speed_y
+
+        if ball.rect.y < 0 or ball.rect.y > 628 - 50:
+            speed_y *= -1
+
+        if sprite.collide_rect(ball, player1):
+            speed_x *= -1
+
+        if sprite.collide_rect(ball, player2):
+            speed_x *= -1
+
+        if ball.rect.x < 0:
+            window.blit(win2, (200, 200))
+
+        if ball.rect.x > 1000:
+            window.blit(win1, (200, 200))
+
+
+
+
+
+
+
 
     for e in event.get():
         if e.type == QUIT:
